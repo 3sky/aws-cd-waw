@@ -1,0 +1,39 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.1",
+            "eventSource": "aws:s3",
+            "awsRegion": "eu-central-1",
+            "eventTime": "2023-05-17T11:00:51.487Z",
+            "eventName": "ObjectCreated:Put",
+            "userIdentity": {
+                "principalId": "AWS:AROAQVXM6MIN7EJD3XUAQ:kuba@3sky.dev"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "46.229.145.106"
+            },
+            "responseElements": {
+                "x-amz-request-id": "MM0K8456TWJGDBWC",
+                "x-amz-id-2": "CYwocKdzcx26miXzJb3rU8IrBoA5Hw3IAteFlPWtiTdH/z7x8AINSvOKAM7uMzhc8wxqNaQ7zaeWFw23gVX4v8VXi7Hbz/mw"
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "NzliNWQwZTktYWE0NC00ODg3LTlkM2ItZTZiMWM5M2ZiMWQ4",
+                "bucket": {
+                    "name": "046667817499-initial-videos",
+                    "ownerIdentity": {
+                        "principalId": "A3426GEQPII3VR"
+                    },
+                    "arn": "arn:aws:s3:::046667817499-initial-videos"
+                },
+                "object": {
+                    "key": "how_to_work_with_pages_in_confluence.mp4",
+                    "size": 15584960,
+                    "eTag": "16c07c68943d779839a3e537ae97aa45",
+                    "versionId": "akE5KChzg3xBOl5hNpjn3ISNT8nP5Vm5",
+                    "sequencer": "006464B3E2EFC49BAD"
+                }
+            }
+        }
+    ]
+}
