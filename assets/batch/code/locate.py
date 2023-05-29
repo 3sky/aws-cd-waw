@@ -319,6 +319,13 @@ def annotate(clip, txt, txt_color='white', fontsize=24, font='Space-Mono-Italic-
     return cvc.set_duration(clip.duration)
 
 
+def get_current_time():
+    """
+    This function returns the current time in seconds
+    """
+    return strftime("%H:%M:%S", gmtime())
+
+
 def create_video(original_clip_name,
                  subtitles_file_name,
                  output_file_name,
@@ -341,54 +348,57 @@ def create_video(original_clip_name,
     """
     logging.info("\n==> createVideo ")
 
-    time_format = "%H:%M:%S"
-
     # Load the original clip
-    logging.info("\t" + strftime("%H:%M:%S", gmtime()),
-                 "Reading video clip: " + original_clip_name)
+    logging.info(f"\t %s Reading video clip: %s " %
+                 (get_current_time(), original_clip_name))
 
     clip = VideoFileClip(original_clip_name)
 
     logging.info("\t\t==> Original clip duration: " + str(clip.duration))
     if use_original_audio is False:
-        logging.info("\t" + strftime("%H:%M:%S", gmtime()),
-                     "Reading alternate audio track: " + alternate_audio_file_name)
+        logging.info(f"\t %s Reading alternate audio track: %s " %
+                     (get_current_time(), alternate_audio_file_name))
         audio = AudioFileClip(alternate_audio_file_name)
         audio = audio.subclip(0, clip.duration)
         audio.set_duration(clip.duration)
         logging.info("\t\t==> Audio duration: " + str(audio.duration))
         clip = clip.set_audio(audio)
     else:
-        logging.info(strftime("\t" + "%H:%M:%S", gmtime()),
-                     "Using original audio track...")
+        logging.info(f"\t %s Using original audio track... " %
+                     (get_current_time()))
 
     # Create a lambda function that will be used to generate the subtitles for each sequence in the SRT
     def generator(txt): return TextClip(
         txt, font='Arial-Bold', fontsize=24, color='white')
 
     # read in the subtitles files
-    logging.info("\t" + strftime("%H:%M:%S", gmtime()),
-                 "Reading subtitle file: " + subtitles_file_name)
+    logging.info(f"\t %s Reading subtitle file: %s " %
+                 (get_current_time(), subtitles_file_name))
+
     subs = SubtitlesClip(subtitles_file_name, generator)
 
     logging.info("\t\t==> Subtitles duration before: " + str(subs.duration))
     subs = subs.subclip(0, clip.duration - .001)
     subs.set_duration(clip.duration - .001)
     logging.info("\t\t==> Subtitles duration after: " + str(subs.duration))
-    logging.info("\t" + strftime("%H:%M:%S", gmtime()),
-                 "Reading subtitle file complete: " + subtitles_file_name)
-    logging.info("\t" + strftime("%H:%M:%S", gmtime()),
-                 "Creating Subtitles Track...")
+    logging.info(f"\t %s Reading subtitle file complete: %s " %
+                 (get_current_time(), subtitles_file_name))
+
+    logging.info(f"\t %s Creating Subtitles Track... " %
+                 (get_current_time()))
+
     annotated_clips = [annotate(clip.subclip(from_t, to_t), txt)
                        for (from_t, to_t), txt in subs]
 
-    logging.info("\t" + strftime("%H:%M:%S", gmtime()),
-                 "Creating composited video: " + output_file_name)
+    logging.info(f"\t %s Creating composited video: %s " %
+                 (get_current_time(), output_file_name))
+
     # Overlay the text clip on the first video clip
     final = concatenate_videoclips(annotated_clips)
 
-    logging.info("\t" + strftime("%H:%M:%S", gmtime()),
-                 "Writing video file: " + output_file_name)
+    logging.info(f"\t %s Writing video file: %s " %
+                 (get_current_time(), output_file_name))
+
     final.write_videofile(output_file_name)
 
 

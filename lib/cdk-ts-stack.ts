@@ -21,8 +21,6 @@ const TranscribeTriggerFunctionCode = readFileSync('./assets/TranscribeTriggerFu
 const BatchTriggerFunctionCode = readFileSync('./assets/BatchTriggerFunction.js', 'utf-8');
 const RunOnceFunctionCode = readFileSync('./assets/RunOnceFunction.js', 'utf-8');
 
-const MyVPC = "vpc-02ba61707d7c854ab"
-
 export class CdkTsStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -31,11 +29,12 @@ export class CdkTsStack extends cdk.Stack {
     cdk.Tags.of(this).add("organization", "3sky.dev");
     cdk.Tags.of(this).add("owner", "kuba");
 
-    const emailAddress = new cdk.CfnParameter(this, "subscriptionEmail");
-
-    const getExistingVpc = ec2.Vpc.fromLookup(this, 'ImportVPC', {
-      vpcId: MyVPC,
+    const emailAddress = new cdk.CfnParameter(this, "subscriptionEmail", {
+      type: "String",
+      description: "Email address to receive notifications"
     });
+
+    const getExistingVpc = ec2.Vpc.fromLookup(this, 'ImportVPC', { isDefault: true });
 
     const defaultBucketProps = {
       versioned: false,
@@ -139,7 +138,7 @@ export class CdkTsStack extends cdk.Stack {
 
     const repository = new codecommit.Repository(this, 'Repository', {
       repositoryName: 'BatchServiceRepository',
-      code: codecommit.Code.fromDirectory(path.join(__dirname, '../assets/batch/'), 'main'), 
+      code: codecommit.Code.fromDirectory(path.join(__dirname, '../assets/batch/'), 'main'),
     });
 
     const registry = new ecr.Repository(this, 'RegistryWithBatchImages', {
@@ -205,10 +204,10 @@ export class CdkTsStack extends cdk.Stack {
           pre_build: {
             commands: [
               'echo "Hello, CodeBuild!"',
-              "aws ecr get-login-password --region " + 
-              cdk.Stack.of(this).region + 
-              " | docker login --username AWS --password-stdin " + 
-              cdk.Stack.of(this).account + ".dkr.ecr." + 
+              "aws ecr get-login-password --region " +
+              cdk.Stack.of(this).region +
+              " | docker login --username AWS --password-stdin " +
+              cdk.Stack.of(this).account + ".dkr.ecr." +
               cdk.Stack.of(this).region + ".amazonaws.com",
             ],
           },
@@ -348,9 +347,9 @@ export class CdkTsStack extends cdk.Stack {
         memory: cdk.Size.mebibytes(8192),
         assignPublicIp: true,
         environment: {
-          "INVIDEO": "s3://046667817499-initial-videos/video.mp4",
-          "INSUBTITLES": "s3://046667817499-transcribed-to-review/transcribe_cfadc0531765c2f6_video.mp4.json",
-          "OUTBUCKET": "046667817499-transcribed-to-review",
+          "INVIDEO": "s3://initial-videos/video.mp4",
+          "INSUBTITLES": "s3://transcribed-to-review/transcribe_cfadc0531765c2f6_video.mp4.json",
+          "OUTBUCKET": "transcribed-to-review",
           "OUTLANG": "es de",
           "REGION": "eu-central-1"
         },
