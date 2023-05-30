@@ -1,8 +1,8 @@
-# Welcome to your CDK TypeScript project
+# AWS Community Day Warsaw
 
-This is a blank project for CDK development with TypeScript.
+## Architecture
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+![image info](./arch.png)
 
 ## Useful commands
 
@@ -24,3 +24,7 @@ docker run -it --rm  \
     --env REGION=eu-central-1 \
     test:latest
 ```
+
+## Credits
+
+Rob Dachowski author of [blog post](https://aws.amazon.com/blogs/machine-learning/create-video-subtitles-with-translation-using-machine-learning/)
